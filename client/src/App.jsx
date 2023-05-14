@@ -3,13 +3,17 @@ import { StreamChat } from 'stream-chat'
 import { Chat } from 'stream-chat-react'
 import Cookies from 'universal-cookie'
 
-import { ChannelContainer, ChannelListContainer} from './components'
+import { ChannelContainer, ChannelListContainer, Auth} from './components'
 
 const apikey = '2s4thzw54q88'
 
 const client = StreamChat.getInstance(apikey)
 
+const authToken = false
+
 const App = () => {
+
+  if(!authToken) return <Auth />
 
   return (
     <>
