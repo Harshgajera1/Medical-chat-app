@@ -16,7 +16,7 @@ const TeamChannelList = ({children,error = false, loading, type}) => {
         return (
             <div className="team-channel-list">
                 <p className="team-channel-list-message loading">
-                    Connection error, please wail a moment and try again.
+                    Connection error, please wait a moment and try again.
                     { type === 'team' ? 'Channels' : 'Messages' } loading...
                 </p>
             </div>

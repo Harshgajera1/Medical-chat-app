@@ -3,9 +3,11 @@ import Cookies from 'universal-cookie'
 import axios from 'axios'
 import signinImage from '../assets/signup.jpg'
 
+const cookies = new Cookies()
+
 const initailState = {
-    fullname : '',
-    username : '',
+    fullName : '',
+    userName : '',
     phoneNumber : '',
     avatarURL : '',
     password : '',
@@ -25,9 +27,29 @@ const Auth = () => {
         setIsSignup((preisSignup)=> !preisSignup)
     }
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async (e) =>{
         e.preventDefault()
-        alert()
+        const { userName, password, fullName, avatarURL, phoneNumber } = form
+
+        const URL = 'http://localhost:8080/auth'
+        const reqBody = {
+            userName, password, fullName, phoneNumber, avatarURL
+        }
+
+        const { data: { token, userId, hashedPassword } }= await axios.post(`${URL}${isSignup ? '/signup' : '/login'}`,reqBody)
+
+        cookies.set('token',token)
+        cookies.set('userName', userName)
+        cookies.set('fullName', fullName)
+        cookies.set('userId', userId)
+
+        if(isSignup){
+            cookies.set('phoneNumber', phoneNumber)
+            cookies.set('avatarURL', avatarURL)
+            cookies.set('hashedPassword', hashedPassword)
+        }
+
+        window.location.reload()
     }
 
   return (
@@ -39,9 +61,9 @@ const Auth = () => {
                     {
                         isSignup && (
                             <div className="auth-form-container-fields-content-input">
-                                <label htmlFor="fullname">Full Name</label>
+                                <label htmlFor="fullName">Full Name</label>
                                 <input 
-                                    name='fullname'
+                                    name='fullName'
                                     type='text'
                                     placeholder='Full Time'
                                     onChange={handleFormData}
@@ -51,9 +73,9 @@ const Auth = () => {
                         )
                     }
                     <div className="auth-form-container-fields-content-input">
-                        <label htmlFor="username">Username</label>
+                        <label htmlFor="userName">Username</label>
                         <input 
-                            name="username" 
+                            name="userName" 
                             type="text"
                             placeholder="Username"
                             onChange={handleFormData}
